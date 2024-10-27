@@ -1,3 +1,6 @@
+from copy import deepcopy
+
+
 # defining node
 class Node:
     def __init__(self, value, next=None):
@@ -152,6 +155,7 @@ def delete_at_index(head, index):
 
 # function for deleting node at index recursively
 def delete_at_index_recursively(head, index):
+    """Time complexity of deletion is O(n)"""
     if head == None:  # when we have to delete the tail node
         print("Index is out of bounds, pleas check index.")
         return head
@@ -165,6 +169,7 @@ def delete_at_index_recursively(head, index):
 
 # function to delete node by value using recursion
 def delete_node_by_value_recursively(head, value):
+    """Time complexity of deletion is O(n)"""
     if head == None:  # if the list is empty
         print("The list is empty.")
         return head
@@ -189,6 +194,35 @@ def delete_tail_recursively(head):
     return head
 
 
+# function for searching values in linked list
+def search_value(head, data):
+    """Time complexity of deletion is O(n)"""
+    if head == None:
+        print("List is empty")
+        return -1
+    temp = head
+    index = 0
+    while temp != None:
+        if temp.data == data:
+            return index
+        temp = temp.next
+        index += 1
+    return -1
+
+
+# function for searching value in linked list recursively
+def search_value_recursively(head, data, index=0):
+    """
+    Time complexity of this function is O(n)
+    This function changes the head. So, use deepcopy() to make a copy of the list head.
+    """
+    if head == None:
+        return -1
+    if head.data == data:
+        return index
+    return search_value_recursively(head.next, data, index+1)
+
+
 if __name__ == "__main__":
     list_head = take_input()
     # list_head = insert_head(list_head, 100)
@@ -196,7 +230,10 @@ if __name__ == "__main__":
     # list_head = insert_at_index_recursively(list_head, 10, 2)
     # list_head = delete_at_index_recursively(list_head, 3)
     # list_head = delete_tail_recursively(list_head)
-    list_head = delete_node_by_value_recursively(list_head, 3)
+    # list_head = delete_node_by_value_recursively(list_head, 3)
+    # index = search_value(list_head, 2)
+    index = search_value_recursively(deepcopy(list_head), 3)
+    print(index)
     print_linked_list(list_head)
 
 
