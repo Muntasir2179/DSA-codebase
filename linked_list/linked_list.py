@@ -1,8 +1,8 @@
 # defining node
 class Node:
-    def __init__(self, value):
+    def __init__(self, value, next=None):
         self.data = value
-        self.next = None
+        self.next = next
 
 # recursive function to print linked list data
 def print_linked_list(head: Node):
@@ -86,8 +86,123 @@ def insert_tail_recursively(head, data):
     return head
 
 
-list_head = take_input()
-# list_head = insert_head(list_head, 100)
-list_head = insert_tail_recursively(list_head, 200)
+# function for inserting node in specific index
+def insert_at_index(head, data, index):
+    # if index is zero then it is the head we have to insert
+    if index == 0:
+        return insert_head(head, data)
+    
+    new_node = Node(data)
+    temp = head
+    count = 0
 
-print_linked_list(list_head)
+    # getting to the position before where we have to insert the node
+    while temp is not None and count < index - 1:
+        temp = temp.next
+        count += 1
+    
+    # when given index is out of bound the temp will contain None
+    if temp == None:
+        print("Index is out of bounds, please check index.")
+        return head
+    
+    new_node.next = temp.next   # connecting the right list head to the new node
+    temp.next = new_node   # connecting the left head list with the new node
+    return head
+
+
+# recursive function to insert node in a specific index
+def insert_at_index_recursively(head, data, index):
+    if index == 0:
+        # when index reached to zero then we have to insert the node there
+        return Node(value=data, next=head)
+    
+    if head == None:
+        print("Index is out of bounds, please check index.")
+        return head
+    
+    # decrementing index and making recursive call
+    head.next = insert_at_index_recursively(head.next, data, index-1)
+    return head
+
+
+# function for deleting a specific node
+def delete_at_index(head, index):
+    """Time complexity of deletion is O(n)"""
+    if head == None:   # when there is not element in the linked list
+        print("No element to delete")
+        return head
+    
+    if index == 0:   # when we have to delete the head element
+        return head.next
+        
+    temp = head
+    count = 0
+    # get to the point before where we have to perform delete
+    while count != index-1 and temp != None:
+        temp = temp.next
+        count += 1
+    
+    if temp == None or temp.next == None: # it means the index to delete is long after tail or just right after the tail, which is not valid index
+        print("Index is out of bounds, please check index.")
+    else:
+        temp.next = temp.next.next  # just skip one node and point to the next after node
+    return head
+
+
+# function for deleting node at index recursively
+def delete_at_index_recursively(head, index):
+    if head == None:  # when we have to delete the tail node
+        print("Index is out of bounds, pleas check index.")
+        return head
+    
+    if index == 0:  # when we have to delete the head node and when we reached at destination index
+        return head.next
+    
+    head.next = delete_at_index_recursively(head.next, index-1)
+    return head
+
+
+# function to delete node by value using recursion
+def delete_node_by_value_recursively(head, value):
+    if head == None:  # if the list is empty
+        print("The list is empty.")
+        return head
+    if head.data == value:  # if we find the data
+        return head.next
+    if head.next == None:  # if we are at the last node and data is not found
+        print("Value is not in the list.")
+        return head
+    
+    head.next = delete_node_by_value_recursively(head.next, value)
+    return head
+
+
+# function for deleting tail recursively
+def delete_tail_recursively(head):
+    if head == None:
+        return None
+    if head.next == None:
+        return None
+    
+    head.next = delete_tail_recursively(head.next)
+    return head
+
+
+if __name__ == "__main__":
+    list_head = take_input()
+    # list_head = insert_head(list_head, 100)
+    # list_head = insert_tail_recursively(list_head, 200)
+    # list_head = insert_at_index_recursively(list_head, 10, 2)
+    # list_head = delete_at_index_recursively(list_head, 3)
+    # list_head = delete_tail_recursively(list_head)
+    list_head = delete_node_by_value_recursively(list_head, 3)
+    print_linked_list(list_head)
+
+
+
+
+"""
+Delete a node --> We stop at a node before.
+Insert a node --> We stop on the node where we insert
+"""
